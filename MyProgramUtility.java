@@ -1,10 +1,12 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class MyProgramUtility {
     private List<Citizen> citizens;
@@ -13,20 +15,27 @@ public class MyProgramUtility {
         citizens = new ArrayList<>();
     }
 
-    public List<Citizen> getCitizens() {
-        return citizens;
-    }
-
     public void loadDataFromFile(String filename) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader("data.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = data[i].trim();
+                }
+                String districtNumberStr = data[6].replaceAll("[^\\d.]", "");
+                int districtNumber = Integer.parseInt(districtNumberStr);
                 Citizen citizen = new Citizen(data[0], data[1], data[2], data[3], Integer.parseInt(data[4]),
-                        data[5], Integer.parseInt(data[6]), data[7]);
+                        data[5].equals("Resident") ? "Resident" : "Non-Resident", districtNumber, data[7]);
                 citizens.add(citizen);
             }
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("File not found: " + filename);
         }
+    }
+
+    public List<Citizen> getCitizens() {
+        return citizens;
     }
 
     public Map<Integer, Integer> getCitizensPerDistrict() {
