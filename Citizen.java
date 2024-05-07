@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 public class Citizen implements Comparable<Citizen> {
     private String lastName;
     private String firstName;
@@ -19,6 +17,72 @@ public class Citizen implements Comparable<Citizen> {
         this.age = age;
         this.residencyType = residencyType;
         this.districtNumber = districtNumber;
+        this.gender = gender;
+    }
+
+    // Getters
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getResidencyType() {
+        return residencyType;
+    }
+
+    public int getDistrictNumber() {
+        return districtNumber;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    // Setters
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setResidencyType(String residencyType) {
+        this.residencyType = residencyType;
+    }
+
+    public void setDistrictNumber(int districtNumber) {
+        this.districtNumber = districtNumber;
+    }
+
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
