@@ -8,18 +8,18 @@ import java.util.Map;
 public class MyProgram extends JFrame {
 
     private MyProgramUtility utility;
-    private JTextField searchField;
     private JTextArea displayArea;
+    private JTextField searchField;
 
     public MyProgram() {
         utility = new MyProgramUtility();
-        createGUI();
+        createMainGUI();
     }
 
-    private void createGUI() {
+    private void createMainGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Citizen Data Processing Program");
-        setSize(600, 400);
+        setSize(800, 600);
         setLayout(new BorderLayout());
 
         // Create menu bar
@@ -66,8 +66,8 @@ public class MyProgram extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchName = searchField.getText();
-                if (searchName != null && !searchName.isEmpty()) {
-                    displayCitizenInfo(searchName);
+                if (!searchName.isEmpty()) {
+                    displaySearchResults(searchName);
                 } else {
                     JOptionPane.showMessageDialog(null, "Please enter a name to search.");
                 }
@@ -89,25 +89,27 @@ public class MyProgram extends JFrame {
         setVisible(true);
     }
 
-    private void displayCitizenInfo(String searchName) {
+    private void displaySearchResults(String searchName) {
         boolean found = false;
-        StringBuilder info = new StringBuilder();
+        StringBuilder searchResult = new StringBuilder();
         for (Citizen citizen : utility.getCitizens()) {
             if (citizen.getLastName().equalsIgnoreCase(searchName) || citizen.getFirstName().equalsIgnoreCase(searchName)) {
                 found = true;
-                info.append(citizen).append("\n");
+                searchResult.append(citizen).append("\n");
             }
         }
-        if (!found) {
-            info.append("Citizen with name '").append(searchName).append("' not found.");
+        if (found) {
+            new SearchResultsFrame(searchName, new StringBuilder(searchResult.toString()));
+        } else {
+            JOptionPane.showMessageDialog(null, "Citizen with name '" + searchName + "' not found.");
         }
-        displayArea.setText(info.toString());
     }
 
     private void loadData() {
         try {
-            utility.loadDataFromFile("data.csv");
+            utility.loadDataFromFile("Sambot/data.csv");
             JOptionPane.showMessageDialog(null, "Data loaded successfully!");
+            displayCitizensInfo(); // Display loaded data in the JTextArea
         } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading data: " + ex.getMessage());
@@ -121,6 +123,14 @@ public class MyProgram extends JFrame {
             message.append("District ").append(entry.getKey()).append(": ").append(entry.getValue()).append(" citizens\n");
         }
         JOptionPane.showMessageDialog(null, message.toString());
+    }
+
+    private void displayCitizensInfo() {
+        StringBuilder info = new StringBuilder();
+        for (Citizen citizen : utility.getCitizens()) {
+            info.append(citizen).append("\n");
+        }
+        displayArea.setText(info.toString());
     }
 
     public static void main(String[] args) {
