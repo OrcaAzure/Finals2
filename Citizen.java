@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Citizen implements Comparable<Citizen> {
     private String lastName;
     private String firstName;
